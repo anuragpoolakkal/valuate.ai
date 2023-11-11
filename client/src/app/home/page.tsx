@@ -8,8 +8,7 @@ import { UploadButton } from "@/utils/uploadthing";
 import axios from "axios";
 import { serverUrl } from "@/utils/utils";
 import { ToastContainer, toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
-import { AiFillSetting } from "react-icons/ai";
+import { AiFillSetting, AiOutlineFileDone } from "react-icons/ai";
 
 export default function Home() {
 
@@ -93,11 +92,11 @@ export default function Home() {
 						{
 							valuators?.map((item: any, index: number) => {
 								return <div
-									onClick={() => (document.getElementById("new_valuation_modal") as any).showModal()}
+									onClick={() => router.push(`/valuate/${item._id}`)}
 									className="hover:shadow-2xl duration-100 cursor-pointer border-2 flex flex-col min-h-[400px] min-w-[350px] mb-10 mr-10 rounded-3xl shadow-lg overflow-hidden"
 								>
 									<div className="flex flex-col items-center justify-center w-full h-full">
-										<AiFillSetting className="h-40 w-40 mb-2" />
+										<AiOutlineFileDone className="h-40 w-40 mb-2" />
 										<p className="font-semibold text-xl">{item?.title}</p>
 									</div>
 								</div>
