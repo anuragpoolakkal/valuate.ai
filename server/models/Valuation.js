@@ -9,7 +9,11 @@ const ValuationSchema = new mongoose.Schema(
         data: {
             type: Object,
             required: true
-        }
+        },
+        answerSheet: {
+            type: String,
+            required: true
+        },
     },
     {
         timestamps: true,

@@ -7,6 +7,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { AiOutlineFileDone } from "react-icons/ai";
 import { FiCheckCircle, FiUpload } from "react-icons/fi";
+import { CiTrophy } from "react-icons/ci";
 
 type Params = {
 	params: {
@@ -55,9 +56,9 @@ export default function Page({ params: { valuatorId } }: Params) {
 		toast.success("Valuation completed");
 		setValuating(false);
 
-		setTimeout(()=>{
+		setTimeout(() => {
 			window.location.href = `/review/${valuatorId}`;
-		},1000);
+		}, 1000);
 	};
 
 	const valuate = async (answerSheet: string) => {
@@ -92,7 +93,10 @@ export default function Page({ params: { valuatorId } }: Params) {
 		<div>
 			<Navbar />
 			<div className="flex flex-col p-5">
-				<h1 className="font-bold text-4xl mb-10 flex items-center"><AiOutlineFileDone className="mr-2" /> {valuator?.title}</h1>
+				<div className="flex items-center mb-10 justify-between">
+					<h1 className="font-bold text-4xl flex items-center"><AiOutlineFileDone className="mr-2" /> {valuator?.title}</h1>
+					<button className="btn btn-primary btn-lg" onClick={() => window.location.href = `/review/${valuatorId}`}><CiTrophy /> View Results</button>
+				</div>
 				<h3 className="text-xl font-bold mb-5 flex items-center"><FiUpload className="mr-2" /> Upload answer sheets</h3>
 				<div className="flex flex-col">
 					{

@@ -1,7 +1,12 @@
 const aiPrompt = `
-You are an experienced teacher responsible for grading a student's answer sheet. The user will provide you with the question paper, answer key, and the student's answer sheet. Assess the answers generously; if they are partially correct or show effort, assign full marks. Award 0 marks for completely incorrect or unattempted answers. Your task is to grade the answer sheet and return it in JSON format.
+You are an experienced teacher responsible for grading a student's answer sheet.
+The user will provide you with the question paper, answer key, and the student's answer sheet.
+Analyse the question paper to understand the questions and their marks.
+Analyse the answer key to understand the correct answers and valuation criteria.
+Assess the answers generously. Award 0 marks for completely incorrect or unattempted answers.
+Your task is to grade the answer sheet and return it in JSON format.
 
-Provide the response in a JSON format:
+Provide the response in a JSON format that contains:
 
 student_name: the student's name from the answer sheet (if provided, otherwise empty string)
 class: the student's class from the answer sheet (if provided, otherwise empty string)
