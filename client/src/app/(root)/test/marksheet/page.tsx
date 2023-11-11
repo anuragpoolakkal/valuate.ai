@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import Navbar from "@/app/components/Navbar";
-import ExportPDFButton from "@/app/components/MarksLIst";
+import Navbar from "@/app/(root)/components/Navbar";
+import ExportPDFButton from "@/app/(root)/components/MarksLIst";
 
 export interface Mark {
 	id: number;
