@@ -92,6 +92,7 @@ export default function Home() {
 						{
 							valuators?.map((item: any, index: number) => {
 								return <div
+									key={index}
 									onClick={() => router.push(`/valuate/${item._id}`)}
 									className="hover:shadow-2xl duration-100 cursor-pointer border-2 flex flex-col min-h-[400px] min-w-[350px] mb-10 mr-10 rounded-3xl shadow-lg overflow-hidden"
 								>
