@@ -30,4 +30,19 @@ router.post("/", async (req, res) => {
     }
 });
 
+router.post("/byId", async (req, res) => {
+    const schema = joi.object({
+        id: joi.string().required(),
+    });
+
+    try {
+        const data = await schema.validateAsync(req.body);
+        const valuator = await Valuator.findById(data.id);
+        return res.send(valuator);
+    }
+    catch (err) {
+        return res.status(500).send(err);
+    }
+});
+
 export default router;
