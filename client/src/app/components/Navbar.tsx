@@ -2,7 +2,16 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AiFillCheckCircle } from "react-icons/ai";
-import { UserButton } from "@clerk/nextjs";
+import { UserButton, SignInWithMetamaskButton } from "@clerk/nextjs";
+
+export default function Home() {
+	return (
+		<div>
+			<h1> Sign in </h1>
+			<SignInWithMetamaskButton />
+		</div>
+	);
+}
 // import { MdLogout } from "react-icons/md";
 
 function Navbar() {
@@ -30,9 +39,9 @@ function Navbar() {
 					</button>
 				</div> */}
 
-				<div className="m-2">
-					{" "}
-					<UserButton afterSignOutUrl="/" />
+				<div className="m-4">
+					{/* <UserButton afterSignOutUrl="/" /> */}
+					<SignInWithMetamaskButton />
 				</div>
 			</div>
 			{/* Premium Modal */}
