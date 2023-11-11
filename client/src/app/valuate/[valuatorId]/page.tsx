@@ -56,7 +56,7 @@ export default function Page({ params: { valuatorId } }: Params) {
 		setValuating(false);
 
 		setTimeout(()=>{
-			window.location.href = `/review`;
+			window.location.href = `/review/${valuatorId}`;
 		},1000);
 	};
 
