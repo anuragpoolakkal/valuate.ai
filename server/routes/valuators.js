@@ -51,9 +51,8 @@ router.post("/byId", async (req, res) => {
 router.post("/valuate", async (req, res) => {
     const schema = joi.object({
         valuatorId: joi.string().required(),
-        answerSheets: joi.array().required(),
+        answerSheet: joi.string().required(),
     });
-
 
     try {
         const data = await schema.validateAsync(req.body);
@@ -102,7 +101,7 @@ router.post("/valuate", async (req, res) => {
                         {
                             type: "image_url",
                             image_url: {
-                                "url": "https://raw.githubusercontent.com/aqeelshamz/src/main/ans2.png",
+                                "url": data.answerSheet,
                             },
                         },
                     ]
@@ -111,10 +110,12 @@ router.post("/valuate", async (req, res) => {
             "max_tokens": 1000,
         });
 
+        const resp = completion.choices[0].message.content;
 
-        return res.send(completion.choices[0].message.content);
+        return res.send(JSON.parse(resp.split("```json")[1].split("```")[0]));
     }
     catch (err) {
+        console.log(err);
         return res.status(500).send(err);
     }
 });
