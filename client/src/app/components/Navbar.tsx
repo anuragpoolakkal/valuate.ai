@@ -2,17 +2,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AiFillCheckCircle } from "react-icons/ai";
-import { UserButton, SignInWithMetamaskButton } from "@clerk/nextjs";
-
-export default function Home() {
-	return (
-		<div>
-			<h1> Sign in </h1>
-			<SignInWithMetamaskButton />
-		</div>
-	);
-}
-// import { MdLogout } from "react-icons/md";
+import { UserButton } from "@clerk/nextjs";
 
 function Navbar() {
 	const router = useRouter();
@@ -28,7 +18,7 @@ function Navbar() {
 					Valuate.AI
 				</Link>
 				{/* <div className="m-2">
-						 <button
+						 <buttons
 						className="btn btn-primary mr-5 text-[#ffd700]"
 						onClick={() => (document.getElementById("premium_modal") as any).showModal()}
 					>
@@ -40,8 +30,7 @@ function Navbar() {
 				</div> */}
 
 				<div className="m-4">
-					{/* <UserButton afterSignOutUrl="/" /> */}
-					<SignInWithMetamaskButton />
+					<UserButton afterSignOutUrl="/" />
 				</div>
 			</div>
 			{/* Premium Modal */}
