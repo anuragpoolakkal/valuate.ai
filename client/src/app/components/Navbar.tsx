@@ -17,17 +17,17 @@ function Navbar() {
 				<Link href={"/home"} className="btn btn-ghost normal-case font-black text-3xl">
 					Valuate.AI
 				</Link>
-				<div className="m-2">
-					<button
+				{/* <div className="m-2">
+						 <button
 						className="btn btn-primary mr-5 text-[#ffd700]"
 						onClick={() => (document.getElementById("premium_modal") as any).showModal()}
 					>
 						Premium
 					</button>
-					{/* <button className="btn btn-primary mr-5" onClick={handleLogout}>
+					<button className="btn btn-primary mr-5" onClick={handleLogout}>
 						Log out <MdLogout />
-					</button> */}
-				</div>
+					</button>
+				</div> */}
 			</div>
 			{/* Premium Modal */}
 			<dialog id="premium_modal" className="modal">
