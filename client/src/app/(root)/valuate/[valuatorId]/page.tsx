@@ -1,131 +1,164 @@
 "use client";
-import { UploadButton } from "@/utils/uploadthing";
-import Navbar from "../../components/Navbar";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import { serverUrl } from "@/utils/utils";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
-import { AiOutlineFileDone } from "react-icons/ai";
-import { FiCheckCircle, FiUpload } from "react-icons/fi";
+import { FiCpu, FiEdit, FiEdit2, FiEdit3, FiStar, FiTablet, FiUser } from "react-icons/fi";
+import { AiOutlineTrophy } from "react-icons/ai";
+import Navbar from "@/app/components/Navbar";
 
 type Params = {
 	params: {
-		valuatorId: string
-	}
-}
-
-export default function Page({ params: { valuatorId } }: Params) {
-	const [valuator, setValuator] = useState<any>(null);
-	const [answerSheets, setAnswerSheets] = useState<any>([]);
-
-	const [results, setResults] = useState<any>([]);
-
-	const getValuator = async () => {
-		const config = {
-			method: "POST",
-			url: `${serverUrl}/valuators/byId`,
-			headers: {
-				"Authorization": `Bearer ${localStorage.getItem("token")}`,
-				"Content-Type": `application/json`,
-			},
-			data: {
-				id: valuatorId,
-			}
-		};
-
-		axios(config)
-			.then((response) => {
-				setValuator(response.data);
-			})
-			.catch((error) => {
-				toast.error("Failed to fetch valuators");
-			});
-	}
-
-	const [currentValuatingSheet, setCurrentValuatingSheet] = useState<any>(1);
-	const [valuating, setValuating] = useState<any>(false);
-
-	const valuateAnswerSheets = async () => {
-		setValuating(true);
-		for (const answerSheet of answerSheets) {
-			await valuate(answerSheet.url);
-			setCurrentValuatingSheet(currentValuatingSheet + 1);
-		}
-
-		toast.success("Valuation completed");
-		setValuating(false);
-
-		setTimeout(()=>{
-			window.location.href = `/review/${valuatorId}`;
-		},1000);
+		valuatorId: string;
 	};
+};
 
-	const valuate = async (answerSheet: string) => {
+const ViewAnswerPage = ({ params: { valuatorId } }: Params) => {
+	const [valuations, setValuations] = useState([]);
+
+	const getValuations = async () => {
 		const config = {
 			method: "POST",
-			url: `${serverUrl}/valuators/valuate`,
+			url: `${serverUrl}/valuators/valuations`,
 			headers: {
-				"Authorization": `Bearer ${localStorage.getItem("token")}`,
+				Authorization: `Bearer ${localStorage.getItem("token")}`,
 				"Content-Type": `application/json`,
 			},
 			data: {
 				valuatorId: valuatorId,
-				answerSheet: answerSheet,
-			}
+			},
 		};
 
-		var response = await axios(config);
-		console.log(response.data)
-
-		setResults([...results, response.data]);
-
-		localStorage.setItem("results", JSON.stringify(results));
-
-		return;
-	}
+		axios(config)
+			.then((response) => {
+				setValuations(response.data);
+			})
+			.catch((error) => {
+				toast.error("Failed to fetch valuators");
+			});
+	};
 
 	useEffect(() => {
-		getValuator();
+		getValuations();
 	}, []);
 
+	const [selectedValuation, setSelectedValuation] = useState<any>(0);
+
 	return (
-		<div>
-			<Navbar />
-			<div className="flex flex-col p-5">
-				<h1 className="font-bold text-4xl mb-10 flex items-center"><AiOutlineFileDone className="mr-2" /> {valuator?.title}</h1>
-				<h3 className="text-xl font-bold mb-5 flex items-center"><FiUpload className="mr-2" /> Upload answer sheets</h3>
-				<div className="flex flex-col">
-					{
-						answerSheets.length > 0 ? <div className="flex flex-col">
-							<p className="font-semibold mb-5 text-xl">Answer Sheets:</p>
-							{
-								answerSheets.map((answerSheet: any) => {
-									return <p>{answerSheet?.url}</p>
-								})
-							}
-						</div> : <UploadButton
-							endpoint="media"
-							onClientUploadComplete={(res) => {
-								// Do something with the response
-								console.log("Files: ", res);
-								setAnswerSheets(res);
-								alert("Upload Completed");
-							}}
-							onUploadError={(error: Error) => {
-								// Do something with the error.
-								alert(`ERROR! ${error.message}`);
-							}}
-						/>
-					}
-				</div>
-				{
-					answerSheets.length > 0 && <div><button className="btn btn-primary mt-10" onClick={valuateAnswerSheets}><FiCheckCircle className="mr-1" /> Valuate</button></div>
-				}
-				{
-					valuating ? <div className="flex"><span className="loading loading-spinner loading-md"></span><p>Validating Answer Sheet {currentValuatingSheet} of {answerSheets?.length}</p></div> : ""
-				}
-				<ToastContainer />
+		<div className="w-full h-full flex flex-col">
+			<div className="flex justify-between z-50 p-5 fixed navbar backdrop-filter backdrop-blur-lg bg-opacity-30  bg-base-100">
+				<select
+					className="text-xl select select-bordered w-full max-w-xs"
+					value={selectedValuation}
+					onChange={(e) => setSelectedValuation(e.target.value)}
+				>
+					{valuations
+						? valuations?.map((valuation: any, index: number) => {
+								return (
+									<option key={index} value={index}>
+										{index + 1}. {valuation?.data?.student_name}
+									</option>
+								);
+						  })
+						: ""}
+				</select>
+				<button className="btn btn-primary">
+					<FiTablet /> GET MARKLIST
+				</button>
 			</div>
+			<div className="flex w-full h-full">
+				<div className="mb-10 p-10 pt-[100px] w-full">
+					{(valuations[selectedValuation] as any)?.data?.answers?.map((item: any, index: number) => {
+						return (
+							<div className="flex my-3 max-w-7xl">
+								<div className="collapse shadow-xl border-2">
+									<input type="checkbox" />
+									<div className="flex items-center justify-between collapse-title">
+										<p className="text-md font-semibold max-w-2xl">
+											{item?.question_no}. {item?.question}
+										</p>
+										<div className="flex items-center">
+											<p className="mx-10 w-[90px] flex items-center font-semibold">
+												<AiOutlineTrophy className="mr-2" />
+												{item?.score[0]} / {item?.score[1]}
+											</p>
+											<div className="w-[100px] flex flex-col ml-5">
+												<span className="flex items-center text-sm text-gray-500 mb-3">
+													<FiCpu className="mr-1" /> Confidence:
+												</span>
+												<div className="flex flex-col">
+													<progress
+														className={
+															"mb-1 progress w-20 " +
+															(item?.confidence === 1
+																? "progress-success"
+																: item?.confidence === 0
+																? "progress-error"
+																: "progress-warning")
+														}
+														value={
+															item?.confidence === 1
+																? "100"
+																: item?.confidence === 0
+																? "0"
+																: "50"
+														}
+														max="100"
+													></progress>
+													<span
+														className={
+															"text-sm font-semibold " +
+															(item?.confidence === 1
+																? "text-green-500"
+																: item?.confidence === 0
+																? "text-red-500"
+																: "text-orange-500")
+														}
+													>
+														{item?.confidence === 1
+															? "High"
+															: item?.confidence === 0
+															? "Low"
+															: "Medium"}
+													</span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div className="collapse-content">
+										<p className="flex items-center text-xl bg-base-200  rounded-lg p-3">
+											{" "}
+											Ans:{" "}
+											{typeof item?.answer === "string"
+												? item?.answer
+												: JSON.stringify(item?.answer)}
+										</p>
+										<p className="flex items-center mt-5 text-md font-semibold text-xl">
+											<AiOutlineTrophy className="mr-2" /> Score:{" "}
+											<input
+												className="mx-3 input input-bordered min-w-[auto] w-[100px]"
+												type="text"
+												value={item?.score[0]}
+											/>{" "}
+											/ {item?.score[1]}
+										</p>
+										<p className="bg-base-200 rounded-lg p-2 flex items-center mt-5 text-md font-semibold">
+											<FiStar className="mr-2" /> Remarks: {item?.remarks}
+										</p>
+									</div>
+								</div>
+							</div>
+						);
+					})}
+				</div>
+				<div className="pt-20 w-[60vw] h-screen mr-5">
+					<img src={(valuations[selectedValuation] as any)?.answerSheet} className="fixed h-full" />
+				</div>
+			</div>
+			<ToastContainer />
 		</div>
 	);
 };
+
+export default ViewAnswerPage;

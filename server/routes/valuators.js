@@ -118,6 +118,7 @@ router.post("/valuate", async (req, res) => {
         const newValuation = new Valuation({
             valuatorId: data.valuatorId,
             data: respData,
+            answerSheet: data.answerSheet,
         });
 
         await newValuation.save();
@@ -138,7 +139,7 @@ router.post("/valuations", async (req, res) => {
     try {
         const data = await schema.validateAsync(req.body);
         const valuations = await Valuation.find({ valuatorId: data.valuatorId });
-        return res.send(valuations);
+        return res.send(valuations.reverse());
     }
     catch (err) {
         return res.status(500).send(err);
