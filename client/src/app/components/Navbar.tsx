@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AiFillCheckCircle } from "react-icons/ai";
+import { UserButton } from "@clerk/nextjs";
 // import { MdLogout } from "react-icons/md";
 
 function Navbar() {
@@ -28,6 +29,11 @@ function Navbar() {
 						Log out <MdLogout />
 					</button>
 				</div> */}
+
+				<div className="m-2">
+					{" "}
+					<UserButton afterSignOutUrl="/" />
+				</div>
 			</div>
 			{/* Premium Modal */}
 			<dialog id="premium_modal" className="modal">
