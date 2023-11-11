@@ -15,5 +15,7 @@ answer: the student's answer
 score: an array containing [ assigned_score, total_score ]
 remarks: any additional remarks or comments regarding the answer.`;
 
-export { aiPrompt };
+const serverUrl = "http://localhost:8080";
+
+export { aiPrompt, serverUrl };
 

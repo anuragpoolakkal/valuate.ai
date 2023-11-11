@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@uploadthing/react": "^5.7.0",
+    "axios": "^1.6.1",
     "next": "14.0.2",
     "openai": "^4.17.4",
     "react": "^18",
