@@ -72,7 +72,6 @@ export default function Home() {
 					<h3 className="flex items-center font-bold text-2xl">
 						<FiPlusCircle className="mr-2" /> New exam valuation
 					</h3>
-
 					<input type="text" placeholder="Title of the exam" className="input input-bordered w-full " />
 					<div className="flex justify-between m-3">
 						<div className="flex flex-col border-2 p-5 w-full mr-4 rounded-lg border-black">
@@ -81,7 +80,7 @@ export default function Home() {
 								endpoint="media"
 								onClientUploadComplete={(res) => {
 									// Do something with the response
-									console.log("Files: ", res);
+									console.log("Files: ", res![0].url);
 									alert("Upload Completed");
 								}}
 								onUploadError={(error: Error) => {
