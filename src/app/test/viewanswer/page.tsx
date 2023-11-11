@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from 'react';
 
-const MarkList = () => {
+const SampleTable = () => {
   const [data, setData] = useState([
     { id: 1, name: 'Cy Ganderton', rollNo: '23', marks: '234', isChecked: true },
     { id: 2, name: 'Hart Hagerty', rollNo: '23', marks: '123', isChecked: false },
@@ -45,4 +45,4 @@ const MarkList = () => {
   );
 };
 
-export default MarkList;
+export default SampleTable;
