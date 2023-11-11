@@ -12,7 +12,7 @@ function Navbar() {
 		router.push("/");
 	};
 	return (
-		<div className="pb-[80px]">
+		<div className="pb-[70px]">
 			<div className="z-50 fixed navbar backdrop-filter backdrop-blur-lg bg-opacity-30  bg-base-100 flex justify-between top-30 z-54">
 				<Link href={"/home"} className="btn btn-ghost normal-case font-black text-3xl">
 					Valuate.AI

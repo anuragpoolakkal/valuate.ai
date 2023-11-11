@@ -1,6 +1,8 @@
 import express from "express";
 import joi from "joi";
 import Valuator from "../models/Valuator.js";
+import OpenAI from "openai";
+import aiPrompt from "../utils/utils.js";
 
 const router = express.Router();
 
@@ -39,6 +41,78 @@ router.post("/byId", async (req, res) => {
         const data = await schema.validateAsync(req.body);
         const valuator = await Valuator.findById(data.id);
         return res.send(valuator);
+    }
+    catch (err) {
+        return res.status(500).send(err);
+    }
+});
+
+
+router.post("/valuate", async (req, res) => {
+    const schema = joi.object({
+        valuatorId: joi.string().required(),
+        answerSheets: joi.array().required(),
+    });
+
+
+    try {
+        const data = await schema.validateAsync(req.body);
+        const valuator = await Valuator.findById(data.valuatorId);
+
+        const openai = new OpenAI({
+            apiKey: process.env.OPENAI_API_KEY,
+        });
+
+
+        const completion = await openai.chat.completions.create({
+            model: "gpt-4-vision-preview",
+            messages: [
+                {
+                    role: "system",
+                    content: aiPrompt,
+                },
+                {
+                    role: "user",
+                    content: [
+                        { type: "text", text: "Question Paper:" },
+                        {
+                            type: "image_url",
+                            image_url: {
+                                "url": valuator.questionPaper,
+                            },
+                        },
+                    ],
+                },
+                {
+                    role: "user",
+                    content: [
+                        { type: "text", text: "Answer Keys:" },
+                        {
+                            type: "image_url",
+                            image_url: {
+                                "url": valuator.answerKey,
+                            },
+                        },
+                    ]
+                },
+                {
+                    role: "user",
+                    content: [
+                        { type: "text", text: "Answer Sheet:" },
+                        {
+                            type: "image_url",
+                            image_url: {
+                                "url": "https://raw.githubusercontent.com/aqeelshamz/src/main/ans2.png",
+                            },
+                        },
+                    ]
+                }
+            ],
+            "max_tokens": 1000,
+        });
+
+
+        return res.send(completion.choices[0].message.content);
     }
     catch (err) {
         return res.status(500).send(err);
