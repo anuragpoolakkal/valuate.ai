@@ -138,8 +138,52 @@ router.post("/valuations", async (req, res) => {
 
     try {
         const data = await schema.validateAsync(req.body);
-        const valuations = await Valuation.find({ valuatorId: data.valuatorId });
+        const valuations = await Valuation.find({ valuatorId: data.valuatorId }).lean();
+
+        for (const valuation of valuations) {
+            valuation.questionPaper = (await Valuator.findById(valuation.valuatorId)).questionPaper;
+            valuation.answerKey = (await Valuator.findById(valuation.valuatorId)).answerKey;
+        }
+
         return res.send(valuations.reverse());
+    }
+    catch (err) {
+        return res.status(500).send(err);
+    }
+});
+
+router.post("/marksheet", async (req, res) => {
+    const schema = joi.object({
+        valuatorId: joi.string().required(),
+    });
+
+    try {
+        const data = await schema.validateAsync(req.body);
+
+        const valuations = await Valuation.find({ valuatorId: data.valuatorId }).lean();
+
+        var marksheet = [];
+
+        for(const valuation of valuations){
+            const answers = valuation.data.answers;
+            var totalScore = 0;
+
+            for(const answer of answers){
+                totalScore += answer.score[0];
+            }
+
+            marksheet.push({
+                name: valuation.data.student_name,
+                rollNo: valuation.data.roll_no,
+                marks: totalScore,
+                isChecked: true
+            });
+        }
+
+        //sort by marks
+        marksheet.sort((a, b) => b.marks - a.marks);
+
+        return res.send(marksheet);
     }
     catch (err) {
         return res.status(500).send(err);
