@@ -18,6 +18,8 @@ export default function Page({ params: { valuatorId } }: Params) {
 	const [valuator, setValuator] = useState<any>(null);
 	const [answerSheets, setAnswerSheets] = useState<any>([]);
 
+	const [results, setResults] = useState<any>([]);
+
 	const getValuator = async () => {
 		const config = {
 			method: "POST",
@@ -52,6 +54,10 @@ export default function Page({ params: { valuatorId } }: Params) {
 
 		toast.success("Valuation completed");
 		setValuating(false);
+
+		setTimeout(()=>{
+			window.location.href = `/review`;
+		},1000);
 	};
 
 	const valuate = async (answerSheet: string) => {
@@ -70,6 +76,11 @@ export default function Page({ params: { valuatorId } }: Params) {
 
 		var response = await axios(config);
 		console.log(response.data)
+
+		setResults([...results, response.data]);
+
+		localStorage.setItem("results", JSON.stringify(results));
+
 		return;
 	}
 

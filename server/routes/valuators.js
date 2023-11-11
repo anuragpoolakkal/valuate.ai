@@ -3,6 +3,7 @@ import joi from "joi";
 import Valuator from "../models/Valuator.js";
 import OpenAI from "openai";
 import aiPrompt from "../utils/utils.js";
+import Valuation from "../models/Valuation.js";
 
 const router = express.Router();
 
@@ -112,10 +113,34 @@ router.post("/valuate", async (req, res) => {
 
         const resp = completion.choices[0].message.content;
 
-        return res.send(JSON.parse(resp.split("```json")[1].split("```")[0]));
+        const respData = JSON.parse(resp.split("```json")[1].split("```")[0]);
+
+        const newValuation = new Valuation({
+            valuatorId: data.valuatorId,
+            data: respData,
+        });
+
+        await newValuation.save();
+
+        return res.send(respData);
     }
     catch (err) {
         console.log(err);
+        return res.status(500).send(err);
+    }
+});
+
+router.post("/valuations", async (req, res) => {
+    const schema = joi.object({
+        valuatorId: joi.string().required(),
+    });
+
+    try {
+        const data = await schema.validateAsync(req.body);
+        const valuations = await Valuation.find({ valuatorId: data.valuatorId });
+        return res.send(valuations);
+    }
+    catch (err) {
         return res.status(500).send(err);
     }
 });
