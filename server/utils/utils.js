@@ -13,7 +13,8 @@ question_no: the question number
 question: the question content
 answer: the student's answer
 score: an array containing [ assigned_score, total_score ]
-remarks: any additional remarks or comments regarding the answer.
+remarks: any additional remarks or comments regarding the answer. If the answer is completely correct, "Correct answer" is a good remark.
+confidence: a number between 0 and 1 indicating how confident you are in your grading. 0 means you are not confident at all, 1 means you are completely confident.
 
 Just send the JSON response only, without any other text.`;
 
