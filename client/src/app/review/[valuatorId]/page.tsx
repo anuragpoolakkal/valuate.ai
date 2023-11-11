@@ -48,11 +48,14 @@ const ViewAnswerPage = ({ params: { valuatorId } }: Params) => {
   return (
     <div className="w-full h-full flex flex-col">
       <div className="flex justify-between z-50 p-5 fixed navbar backdrop-filter backdrop-blur-lg bg-opacity-30  bg-base-100">
+        <div>
+          <p className="mr-5 flex items-center font-semibold text-lg"><FiUser className="mr-2"/> Student: </p>
         <select className="text-xl select select-bordered w-full max-w-xs" value={selectedValuation} onChange={(e) => setSelectedValuation(e.target.value)}>
           {valuations ? valuations?.map((valuation: any, index: number) => {
             return <option key={index} value={index}>{index + 1}. {valuation?.data?.student_name}</option>
           }) : ""}
         </select>
+        </div>
         <button className="btn btn-primary"><FiTablet /> GET MARKLIST</button>
       </div>
       <div className="flex w-full h-full">
