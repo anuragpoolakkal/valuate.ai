@@ -12,7 +12,7 @@ export default function Home() {
 				<p className="text-black mt-5 text-3xl ml-20">
 					Exam Answer Paper Valuation and Marksheet Generation using AI
 				</p>
-				<button className="btn btn-primary btn-lg ml-20 mt-10" onClick={() => router.push("/login")}>
+				<button className="btn btn-primary btn-lg ml-20 mt-10" onClick={() => router.push("/home")}>
 					Get Started
 				</button>
 			</div>
