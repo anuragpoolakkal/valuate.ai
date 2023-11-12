@@ -164,11 +164,11 @@ router.post("/marksheet", async (req, res) => {
 
         var marksheet = [];
 
-        for(const valuation of valuations){
+        for (const valuation of valuations) {
             const answers = valuation.data.answers;
             var totalScore = 0;
 
-            for(const answer of answers){
+            for (const answer of answers) {
                 totalScore += answer.score[0];
             }
 
@@ -186,6 +186,85 @@ router.post("/marksheet", async (req, res) => {
         return res.send(marksheet);
     }
     catch (err) {
+        return res.status(500).send(err);
+    }
+});
+
+router.post("/revaluate", async (req, res) => {
+    const schema = joi.object({
+        valuationId: joi.string().required(),
+        remarks: joi.string().required().allow(""),
+    });
+
+    try {
+        const data = await schema.validateAsync(req.body);
+        const valuation = await Valuation.findById(data.valuationId);
+
+        const valuator = await Valuator.findById(valuation.valuatorId);
+
+        const openai = new OpenAI({
+            apiKey: process.env.OPENAI_API_KEY,
+        });
+
+        const completion = await openai.chat.completions.create({
+            model: "gpt-4-vision-preview",
+            messages: [
+                {
+                    role: "system",
+                    content: aiPrompt + "\n\nEXTRA REMARKS (VERY IMPORTANT!!): " + data.remarks + (data.remarks ? "\nGive remarks as 'Revaluated' for all questions extra remarks applied to." : ""),
+                },
+                {
+                    role: "user",
+                    content: [
+                        { type: "text", text: "Question Paper:" },
+                        {
+                            type: "image_url",
+                            image_url: {
+                                "url": valuator.questionPaper,  
+                            },
+                        },
+                    ],
+                },
+                {
+                    role: "user",
+                    content: [
+                        { type: "text", text: "Answer Keys:" },
+                        {
+                            type: "image_url",
+                            image_url: {
+                                "url": valuator.answerKey,
+                            },
+                        },
+                    ]
+                },
+                {
+                    role: "user",
+                    content: [
+                        { type: "text", text: "Answer Sheet:" },
+                        {
+                            type: "image_url",
+                            image_url: {
+                                "url": valuation.answerSheet,
+                            },
+                        },
+                    ]
+                }
+            ],
+            "max_tokens": 1000,
+        });
+
+        const resp = completion.choices[0].message.content;
+
+        const respData = JSON.parse(resp.split("```json")[1].split("```")[0]);
+
+        await Valuation.findByIdAndUpdate(data.valuationId, {
+            data: respData,
+        });
+
+        return res.send(respData);
+    }
+    catch (err) {
+        console.log(err);
         return res.status(500).send(err);
     }
 });

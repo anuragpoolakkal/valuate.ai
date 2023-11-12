@@ -4,7 +4,7 @@ import Image from "next/image";
 import { serverUrl } from "@/utils/utils";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
-import { FiArrowLeft, FiCpu, FiEdit, FiEdit2, FiEdit3, FiStar, FiTablet, FiUser } from "react-icons/fi";
+import { FiArrowLeft, FiCpu, FiEdit, FiEdit2, FiEdit3, FiPlusCircle, FiRefreshCcw, FiStar, FiTablet, FiUser } from "react-icons/fi";
 import { AiOutlineTrophy } from "react-icons/ai";
 import Navbar from "../../components/Navbar";
 
@@ -46,6 +46,38 @@ const ViewAnswerPage = ({ params: { valuatorId } }: Params) => {
 	const [selectedValuation, setSelectedValuation] = useState<any>(0);
 
 	const [view, setView] = useState<number>(0);
+	const [revaluationRemarks, setRevaluationRemarks] = useState<string>("");
+
+	const [revaluating, setRevaluating] = useState<boolean>(false);
+
+	const revaluate = async () => {
+		setRevaluating(true);
+		const config = {
+			method: "POST",
+			url: `${serverUrl}/valuators/revaluate`,
+			headers: {
+				"Authorization": `Bearer ${localStorage.getItem("token")}`,
+				"Content-Type": `application/json`,
+			},
+			data: {
+				valuationId: (valuations[selectedValuation] as any)?._id,
+				remarks: revaluationRemarks
+			}
+		};
+
+		axios(config)
+			.then((response) => {
+				(document.getElementById("revaluation_modal") as any).close()
+				setRevaluating(false);
+				getValuations();
+				toast.success("Revaluation successful");
+			})
+			.catch((error) => {
+				(document.getElementById("revaluation_modal") as any).close()
+				setRevaluating(false);
+				toast.error("Failed to revaluate");
+			});
+	}
 
 	return (
 		<div className="w-full h-full flex flex-col">
@@ -59,6 +91,7 @@ const ViewAnswerPage = ({ params: { valuatorId } }: Params) => {
 								return <option key={index} value={index}>{index + 1}. {valuation?.data?.student_name}</option>
 							}) : ""}
 						</select>
+						<button className="btn btn-primary ml-3" onClick={() => (document.getElementById("revaluation_modal") as any).showModal()}><FiRefreshCcw /> Revaluate</button>
 					</div>
 				</div>
 				<div className="join">
@@ -105,6 +138,25 @@ const ViewAnswerPage = ({ params: { valuatorId } }: Params) => {
 				</div>
 			</div>
 			<ToastContainer />
+			{/* Revaluation modal */}
+			<dialog id="revaluation_modal" className="modal">
+				<div className="modal-box max-w-2xl align-middle">
+					<h3 className="flex items-center font-bold text-2xl mb-5">
+						<FiRefreshCcw className="mr-2" /> Revaluate {(valuations[selectedValuation] as any)?.data?.student_name}'s answer sheet
+					</h3>
+					<p className="mb-5 font-semibold">Remarks</p>
+					<textarea className="textarea textarea-bordered w-full" placeholder="Remarks" value={revaluationRemarks} onChange={(e) => setRevaluationRemarks(e.target.value)}></textarea>
+					<button className={"mt-10 btn w-full btn-primary " + (revaluating ? "opacity-60" : "")} onClick={() => {
+						if (revaluating) return;
+						revaluate();
+					}}>
+						{revaluating ? <span className="loading loading-spinner loading-sm"></span> : "Revaluate"}
+					</button>
+				</div>
+				<form method="dialog" className="modal-backdrop">
+					<button>close</button>
+				</form>
+			</dialog>
 		</div>
 	);
 };
