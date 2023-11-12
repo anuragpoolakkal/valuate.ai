@@ -17,20 +17,18 @@ function Navbar() {
 				<Link href={"/home"} className="btn btn-ghost normal-case font-black text-3xl">
 					valuate.ai
 				</Link>
-				{/* <div className="m-2">
-						 <buttons
-						className="btn btn-primary mr-5 text-[#ffd700]"
+				<div className="flex">
+				<div className="m-2">
+					<button
+						className="btn btn-primary mr-5"
 						onClick={() => (document.getElementById("premium_modal") as any).showModal()}
 					>
-						Premium
+						🚀 Premium
 					</button>
-					<button className="btn btn-primary mr-5" onClick={handleLogout}>
-						Log out <MdLogout />
-					</button>
-				</div> */}
-
+				</div>
 				<div className="m-4">
 					<UserButton afterSignOutUrl="/" />
+				</div>
 				</div>
 			</div>
 			{/* Premium Modal */}
