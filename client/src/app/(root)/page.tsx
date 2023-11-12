@@ -10,11 +10,10 @@ export default function Home() {
       <div className="backdrop-filter backdrop-blur-lg text-white">
         <div className="flex flex-col items-center text-white">
           <h1 className="text-6xl font-extrabold mb-4 text-gradient animate-fade-in">
-            GradeWiseAI
+            valuate.ai
           </h1>
           <p className="text-2xl mb-8 text-opacity-80">
-            Elevate Education with GradeWiseAI: Transforming Traditional
-            Grading into Intelligent Assessment!
+            Exam Answer Paper Valuation and Marksheet Generation using AI
           </p>
           <button
             className="btn btn-primary btn-lg transform transition-transform hover:scale-105 focus:outline-none focus:ring focus:border-primary-dark"

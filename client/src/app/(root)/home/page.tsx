@@ -3,12 +3,12 @@ import Navbar from "../components/Navbar";
 import { useRouter } from "next/navigation";
 import { CiCirclePlus } from "react-icons/ci";
 import { useEffect, useState } from "react";
-import { FiFileText, FiPlusCircle } from "react-icons/fi";
+import { FiCheckCircle, FiFileText, FiPlusCircle } from "react-icons/fi";
 import { UploadButton } from "@/utils/uploadthing";
 import axios from "axios";
 import { serverUrl } from "@/utils/utils";
 import { ToastContainer, toast } from "react-toastify";
-import { AiFillSetting, AiOutlineFileDone } from "react-icons/ai";
+import { AiFillCheckCircle, AiFillSetting, AiOutlineFileDone } from "react-icons/ai";
 
 export default function Home() {
 
@@ -119,6 +119,7 @@ export default function Home() {
 					<div className="w-full flex flex-col">
 						<p className="mb-2 mt-7 font-semibold">Upload question paper</p>
 						<div className="flex">
+							{questionPaperUrl ? <AiFillCheckCircle className="text-2xl mr-2 text-green-500" /> : ""}
 							{questionPaperUrl ? questionPaperUrl : <UploadButton
 								endpoint="media"
 								onClientUploadComplete={(res) => {
@@ -136,6 +137,7 @@ export default function Home() {
 					<div className="w-full flex flex-col">
 						<p className="mb-2 mt-7 font-semibold">Upload answer key / criteria</p>
 						<div className="flex">
+							{answerKeyUrl ? <AiFillCheckCircle className="text-2xl mr-2 text-green-500" /> : ""}
 							{answerKeyUrl ? answerKeyUrl : <UploadButton
 								endpoint="media"
 								onClientUploadComplete={(res) => {

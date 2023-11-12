@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { serverUrl } from "@/utils/utils";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
-import { AiOutlineFileDone } from "react-icons/ai";
+import { AiFillCheckCircle, AiOutlineFileDone } from "react-icons/ai";
 import { FiCheckCircle, FiUpload } from "react-icons/fi";
 import { CiTrophy } from "react-icons/ci";
 
@@ -47,6 +47,7 @@ export default function Page({ params: { valuatorId } }: Params) {
   const [valuating, setValuating] = useState<any>(false);
 
   const valuateAnswerSheets = async () => {
+    (document.getElementById("valuation_modal") as any).showModal();
     setValuating(true);
     for (const answerSheet of answerSheets) {
       await valuate(answerSheet.url);
@@ -55,6 +56,7 @@ export default function Page({ params: { valuatorId } }: Params) {
 
     toast.success("Valuation completed");
     setValuating(false);
+    (document.getElementById("valuation_modal") as any).close();
 
     setTimeout(() => {
       window.location.href = `/review/${valuatorId}`;
@@ -104,10 +106,10 @@ export default function Page({ params: { valuatorId } }: Params) {
         <div className="flex flex-col">
           {
             answerSheets.length > 0 ? <div className="flex flex-col">
-              <p className="font-semibold mb-5 text-xl">Answer Sheets:</p>
+              <p className="font-semibold mb-5 text-xl">Answer Sheets Uploaded:</p>
               {
                 answerSheets.map((answerSheet: any) => {
-                  return <p>{answerSheet?.url}</p>
+                  return <p className="flex items-center mb-2"><AiFillCheckCircle className="text-2xl mr-2 text-green-500" />{answerSheet?.url}</p>
                 })
               }
             </div> : <div className="flex">
@@ -117,7 +119,6 @@ export default function Page({ params: { valuatorId } }: Params) {
                   // Do something with the response
                   console.log("Files: ", res);
                   setAnswerSheets(res);
-                  alert("Upload Completed");
                 }}
                 onUploadError={(error: Error) => {
                   // Do something with the error.
@@ -128,13 +129,31 @@ export default function Page({ params: { valuatorId } }: Params) {
           }
         </div>
         {
-          answerSheets.length > 0 && <div><button className="btn btn-primary mt-10" onClick={valuateAnswerSheets}><FiCheckCircle className="mr-1" /> Valuate</button></div>
+          answerSheets.length > 0 && <div><button className="btn btn-primary mt-10 btn-lg" onClick={() => {
+            valuateAnswerSheets();
+          }}><FiCheckCircle className="mr-1" /> Start Valuation</button></div>
         }
-        {
+        {/* {
           valuating ? <div className="flex"><span className="loading loading-spinner loading-md"></span><p>Validating Answer Sheet {currentValuatingSheet} of {answerSheets?.length}</p></div> : ""
-        }
+        } */}
         <ToastContainer />
       </div>
+      {/* Revaluation modal */}
+      <dialog id="valuation_modal" className="modal">
+        <div className="modal-box max-w-2xl align-middle">
+          <h3 className="flex items-center font-bold text-2xl mb-5">
+            <FiCheckCircle className="mr-2" /> Valuating Answer Sheets
+          </h3>
+          <div className="my-10 flex flex-col items-center justify-center">
+            <span className="loading loading-spinner loading-lg mb-10"></span>
+            <p className="text-lg mb-5">Valuating Answer Sheet {currentValuatingSheet} of {answerSheets?.length}</p>
+            <progress className="progress mb-5 w-[20vw]" value={currentValuatingSheet / answerSheets?.length * 100} max="100"></progress>
+          </div>
+        </div>
+        <form method="dialog" className="modal-backdrop">
+          <button>close</button>
+        </form>
+      </dialog>
     </div>
   );
 };
