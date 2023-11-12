@@ -67,12 +67,14 @@ const ViewAnswerPage = ({ params: { valuatorId } }: Params) => {
 
 		axios(config)
 			.then((response) => {
+				setRevaluationRemarks("");
 				(document.getElementById("revaluation_modal") as any).close()
 				setRevaluating(false);
 				getValuations();
 				toast.success("Revaluation successful");
 			})
 			.catch((error) => {
+				setRevaluationRemarks("");
 				(document.getElementById("revaluation_modal") as any).close()
 				setRevaluating(false);
 				toast.error("Failed to revaluate");
