@@ -16,6 +16,28 @@ type Params = {
 
 const ViewAnswerPage = ({ params: { valuatorId } }: Params) => {
 	const [valuations, setValuations] = useState([]);
+	const [totalMarks, setTotalMarks] = useState<any>(null);
+
+	const getTotalMarks = async () => {
+		if(!((valuations[selectedValuation] as any)?._id)) return;
+
+		const config = {
+			method: "POST",
+			url: `${serverUrl}/valuators/total-marks`,
+			headers: {
+				"Authorization": `Bearer ${localStorage.getItem("token")}`,
+				"Content-Type": `application/json`,
+			},
+			data: {
+				valuationId: (valuations[selectedValuation] as any)?._id
+			}
+		};
+
+		axios(config)
+			.then((response) => {
+				setTotalMarks(response.data);
+			})
+	}
 
 	const getValuations = async () => {
 		const config = {
@@ -81,13 +103,17 @@ const ViewAnswerPage = ({ params: { valuatorId } }: Params) => {
 			});
 	}
 
+	useEffect(()=>{
+		getTotalMarks();
+	},[valuations, selectedValuation])
+
 	return (
 		<div className="w-full h-full flex flex-col">
 			<div className="flex justify-between z-50 p-5 fixed navbar backdrop-filter backdrop-blur-lg bg-opacity-30  bg-base-100">
 				<div className="flex items-center">
 					<button className="btn btn-square mr-5" onClick={() => window.location.href = `/valuate/${valuatorId}`}><FiArrowLeft className="text-2xl" /></button>
 					<div className="flex items-center">
-						<p className="mr-5 flex items-center font-semibold text-lg"><FiUser className="mr-2" /> Student: </p>
+						<p className="font-semibold text-2xl min-w-fit mr-10">{totalMarks?.examName}</p><p className="mr-5 flex items-center font-semibold text-lg"><FiUser className="mr-2" /> Student: </p>
 						<select className="text-xl select select-bordered w-full max-w-xs" value={selectedValuation} onChange={(e) => setSelectedValuation(e.target.value)}>
 							{valuations ? valuations?.map((valuation: any, index: number) => {
 								return <option key={index} value={index}>{index + 1}. {valuation?.data?.student_name}</option>
@@ -104,6 +130,7 @@ const ViewAnswerPage = ({ params: { valuatorId } }: Params) => {
 			</div>
 			<div className="flex w-full h-full">
 				<div className="mb-10 p-10 pt-[100px] w-full">
+				<p className="font-semibold text-xl mb-5 flex items-center"><AiOutlineTrophy className="mr-2"/> Total marks scored: {totalMarks?.totalScore} / {totalMarks?.maxScore}</p>
 					{
 						(valuations[selectedValuation] as any)?.data?.answers?.map((item: any, index: number) => {
 							return <div className="flex my-3 max-w-7xl">

@@ -8,7 +8,13 @@ import Valuation from "../models/Valuation.js";
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-    res.send((await Valuator.find()).reverse());
+    var valuators = await Valuator.find().lean();
+
+    for(const valuator of valuators){
+        valuator.valuations = await Valuation.find({valuatorId: valuator._id}).countDocuments();
+    }
+
+    res.send(valuators.reverse());
 });
 
 router.post("/", async (req, res) => {
@@ -152,6 +158,33 @@ router.post("/valuations", async (req, res) => {
     }
 });
 
+router.post("/total-marks", async (req, res) => {
+    const schema = joi.object({
+        valuationId: joi.string().required(),
+    });
+
+    try {
+        const data = await schema.validateAsync(req.body);
+        const valuation = await Valuation.findById(data.valuationId);
+        var totalScore = 0;
+        var maxScore = 0;
+
+        for (const answer of valuation.data.answers) {
+            totalScore += answer.score[0];
+            maxScore += answer.score[1];
+        }
+
+        return res.send({
+            examName: (await Valuator.findById(valuation.valuatorId)).title,
+            totalScore: totalScore.toString(),
+            maxScore: maxScore.toString(),
+        });
+    }
+    catch (err) {
+        return res.status(500).send(err);
+    }
+});
+
 router.post("/marksheet", async (req, res) => {
     const schema = joi.object({
         valuatorId: joi.string().required(),
@@ -187,7 +220,7 @@ router.post("/marksheet", async (req, res) => {
     }
     catch (err) {
         return res.status(500).send(err);
-    }
+    }   
 });
 
 router.post("/revaluate", async (req, res) => {
@@ -220,7 +253,7 @@ router.post("/revaluate", async (req, res) => {
                         {
                             type: "image_url",
                             image_url: {
-                                "url": valuator.questionPaper,  
+                                "url": valuator.questionPaper,
                             },
                         },
                     ],

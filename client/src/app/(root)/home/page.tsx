@@ -80,7 +80,7 @@ export default function Home() {
 			<Navbar />
 			<main className="flex flex-col items-center w-full h-full">
 				<div className="w-full h-full p-5 px-10">
-					<p className="text-2xl my-4 mb-7 font-semibold">My exam valuations</p>
+					<p className="text-2xl my-4 mb-7 font-semibold">My Exam Valuators ({valuators.length})</p>
 					<div className="flex flex-wrap w-full">
 						{/* <div
 							onClick={() => (document.getElementById("new_valuation_modal") as any).showModal()}
@@ -105,7 +105,7 @@ export default function Home() {
 									</div>
 									<div className="p-5 h-auto">
 										<p className="font-semibold text-lg">{item?.title}</p>
-										<p className="text-gray-500">15 valuated</p>
+										<p className="text-gray-500">{item?.valuations} valuations</p>
 									</div>
 								</div></Section>
 
