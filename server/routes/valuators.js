@@ -8,7 +8,7 @@ import Valuation from "../models/Valuation.js";
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-    res.send(await Valuator.find());
+    res.send((await Valuator.find()).reverse());
 });
 
 router.post("/", async (req, res) => {

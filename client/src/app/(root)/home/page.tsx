@@ -60,6 +60,7 @@ export default function Home() {
 			.then((response) => {
 				setCreatingValuator(false);
 				toast.success("Valuator created successfully!");
+				getValuators();
 				(document.getElementById("new_valuation_modal") as any).close()
 			})
 			.catch((error) => {
