@@ -3,37 +3,53 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 export default function Home() {
-	const router = useRouter();
+  const router = useRouter();
+  
 
-	return (
-		<main className="flex items-center w-[100vw] h-[100vh] overflow-hidden bg-gradient-to-tr from-[#dcd4ff] to-[#bdaeff]">
-			<div className="backdrop-filter backdrop-blur-lg">
-				<div className="flex">
-					<h1 className="ml-20 relative text-black text-9xl font-bold">Valuate.AI</h1>
-				</div>
-				<p className="text-black mt-5 text-3xl ml-20">
-					Exam Answer Paper Valuation and Marksheet Generation using AI
-				</p>
-				<button className="btn btn-primary btn-lg ml-20 mt-10" onClick={() => router.push("/home")}>
-					Get Started
-				</button>
-			</div>
-			<div className="mt-20 flex ml-20">
-				<div className="card w-110 backdrop-filter backdrop-blur-lg bg-opacity-30  bg-base-100 border-b border-gray-200 mr-2">
-					<div className="card-body">
-						<h2 className="card-title mb-5">Valuating answer sheets made easy</h2>
-						<p className="font-semibold">
-							🤖 Create exam valuators by uploading question papers and criteria
-						</p>
-						<p className="font-semibold">📄 Bulk upload answer sheets and let AI value them</p>
-						<p className="font-semibold">⏰ Save time on answer paper valuation</p>
-						<p className="font-semibold">📝 Review marks assigned by AI </p>
-					</div>
-				</div>
-			</div>
-			{/* <div className="mx-auto">
-				<Image src={"/forms.png"} alt="hero" width={500} height={500} />
+  return (
+    <main className="flex items-center justify-center w-screen h-screen overflow-hidden bg-gradient-to-tr from-[#6c63ff] to-[#20bee9]">
+      <div className="backdrop-filter backdrop-blur-lg text-white">
+        <div className="flex flex-col items-center text-white">
+          <h1 className="text-6xl font-extrabold mb-4 text-gradient">
+            Valuate.AI
+          </h1>
+          <p className="text-2xl mb-8 text-opacity-80">
+            Exam Answer Paper Valuation and Marksheet Generation using AI
+          </p>
+          <button
+            className="btn btn-primary btn-lg transform transition-transform hover:scale-105 focus:outline-none focus:ring focus:border-primary-dark"
+            onClick={() => router.push("/home")}
+          >
+            Get Started
+          </button>
+        </div>
+
+        <div className="mt-16 mx-auto max-w-screen-lg grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="card backdrop-filter backdrop-blur-lg bg-opacity-80 bg-base-100 border-b border-gray-200">
+            <div className="card-body text-black">
+              <h2 className="card-title text-3xl font-bold mb-5">
+                Valuating answer sheets made easy
+              </h2>
+              <ul className="list-disc pl-6">
+                <li className="mb-2">
+                  🤖 Create exam valuators by uploading question papers and
+                  criteria
+                </li>
+                <li className="mb-2">
+                  📄 Bulk upload answer sheets and let AI value them
+                </li>
+                <li className="mb-2">⏰ Save time on answer paper valuation</li>
+                <li className="mb-2">📝 Review marks assigned by AI</li>
+              </ul>
+            </div>
+          </div>
+
+          {/* You can uncomment the following section to add an image */}
+          {/* <div className="mx-auto">
+			  <Image src={"/forms.png"} alt="hero" width={500} height={500} />
 			</div> */}
-		</main>
-	);
+        </div>
+      </div>
+    </main>
+  );
 }
