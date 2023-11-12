@@ -6,7 +6,7 @@ import "../globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-	title: "Valuate.AI",
+	title: "valuate.ai",
 	description: "Exam Answer Paper Valuation and Marksheet Generation using AI",
 };
 

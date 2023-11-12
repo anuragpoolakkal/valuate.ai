@@ -6,9 +6,10 @@ import { useEffect, useState } from "react";
 import { FiCheckCircle, FiFileText, FiPlusCircle } from "react-icons/fi";
 import { UploadButton } from "@/utils/uploadthing";
 import axios from "axios";
-import { serverUrl } from "@/utils/utils";
+import { bgColors, serverUrl } from "@/utils/utils";
 import { ToastContainer, toast } from "react-toastify";
 import { AiFillCheckCircle, AiFillSetting, AiOutlineFileDone } from "react-icons/ai";
+import Section from "../components/Animate";
 
 export default function Home() {
 
@@ -75,13 +76,13 @@ export default function Home() {
 	}, [])
 
 	return (
-		<>
+		<div>
 			<Navbar />
 			<main className="flex flex-col items-center w-full h-full">
 				<div className="w-full h-full p-5 px-10">
 					<p className="text-2xl my-4 mb-7 font-semibold">My exam valuations</p>
 					<div className="flex flex-wrap w-full">
-						<div
+						{/* <div
 							onClick={() => (document.getElementById("new_valuation_modal") as any).showModal()}
 							className="hover:shadow-2xl duration-100 cursor-pointer border-2 flex flex-col min-h-[400px] min-w-[350px] mb-10 mr-10 rounded-3xl shadow-lg overflow-hidden"
 						>
@@ -89,19 +90,35 @@ export default function Home() {
 								<CiCirclePlus className="h-40 w-40 mb-2" />
 								<p className="font-semibold text-xl">New valuator</p>
 							</div>
+						</div> */}
+						<div onClick={() => (document.getElementById("new_valuation_modal") as any)?.showModal()} className="hover:shadow-2xl duration-100 cursor-pointer border-2 flex flex-col min-h-[400px] min-w-[350px] mb-10 mr-10 rounded-3xl shadow-lg overflow-hidden">
+							<div className="flex flex-col items-center justify-center w-full h-full">
+								<CiCirclePlus className="h-40 w-40 mb-2" />
+								<p className="font-semibold text-xl">New Valuator</p>
+							</div>
 						</div>
 						{
 							valuators?.map((item: any, index: number) => {
-								return <div
-									key={index}
-									onClick={() => router.push(`/valuate/${item._id}`)}
-									className="hover:shadow-2xl duration-100 cursor-pointer border-2 flex flex-col min-h-[400px] min-w-[350px] mb-10 mr-10 rounded-3xl shadow-lg overflow-hidden"
-								>
-									<div className="flex flex-col items-center justify-center w-full h-full">
-										<AiOutlineFileDone className="h-40 w-40 mb-2" />
-										<p className="font-semibold text-xl">{item?.title}</p>
+								return <Section key={index} translate="translateY(10px)" duration={((index * 0.075) + 0.5).toString() + "s"}><div onClick={() => router.push(`/valuate/${item._id}`)} className="hover:shadow-2xl duration-100 cursor-pointer border-2 flex flex-col h-full w-full mb-10 mr-10 rounded-3xl shadow-lg overflow-hidden">
+									<div style={{ background: `linear-gradient(45deg, ${bgColors[item?.title.toString().toLowerCase()[0]][0]}, ${bgColors[item?.title.toString().toLowerCase()[0]][1]})` }} className={"flex items-center justify-center w-full h-full opacity-50"}>
+										<AiOutlineFileDone style={{ color: bgColors[item?.title.toString().toLowerCase()[0]][1] }} className={"h-40 w-40 mb-2"} />
 									</div>
-								</div>
+									<div className="p-5 h-auto">
+										<p className="font-semibold text-lg">{item?.title}</p>
+										<p className="text-gray-500">15 valuated</p>
+									</div>
+								</div></Section>
+
+								// return <div
+								// 	key={index}
+								// 	onClick={() => router.push(`/valuate/${item._id}`)}
+								// 	className="hover:shadow-2xl duration-100 cursor-pointer border-2 flex flex-col min-h-[400px] min-w-[350px] mb-10 mr-10 rounded-3xl shadow-lg overflow-hidden"
+								// >
+								// 	<div className="flex flex-col items-center justify-center w-full h-full">
+								// 		<AiOutlineFileDone className="h-40 w-40 mb-2" />
+								// 		<p className="font-semibold text-xl">{item?.title}</p>
+								// 	</div>
+								// </div>
 							})
 						}
 					</div>
@@ -165,6 +182,6 @@ export default function Home() {
 			</dialog>
 			{/* New valuation modal end */}
 			<ToastContainer />
-		</>
+		</div>
 	);
 }
