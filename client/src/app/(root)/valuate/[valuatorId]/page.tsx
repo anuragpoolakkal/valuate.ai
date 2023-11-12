@@ -96,8 +96,8 @@ export default function Page({ params: { valuatorId } }: Params) {
         <div className="flex items-center mb-10 justify-between">
           <h1 className="font-bold text-4xl flex items-center"><AiOutlineFileDone className="mr-2" /> {valuator?.title}</h1>
           <div className="flex">
-            <button className="btn btn-primary btn-lg mr-2" onClick={() => window.location.href = `/review/${valuatorId}`}><FiCheckCircle /> Review Answer Sheets</button>
-            <button className="btn btn-primary btn-lg" onClick={() => window.location.href = `/marksheet/${valuatorId}`}><CiTrophy /> View Marksheet</button>
+            <button className="btn btn-primary btn-md mr-2" onClick={() => window.location.href = `/review/${valuatorId}`}><FiCheckCircle /> Review Answer Sheets</button>
+            <button className="btn btn-primary btn-md" onClick={() => window.location.href = `/marksheet/${valuatorId}`}><CiTrophy /> View Marksheet</button>
           </div>
         </div>
         <h3 className="text-xl font-bold mb-5 flex items-center"><FiUpload className="mr-2" /> Upload answer sheets</h3>
@@ -110,19 +110,21 @@ export default function Page({ params: { valuatorId } }: Params) {
                   return <p>{answerSheet?.url}</p>
                 })
               }
-            </div> : <UploadButton
-              endpoint="media"
-              onClientUploadComplete={(res) => {
-                // Do something with the response
-                console.log("Files: ", res);
-                setAnswerSheets(res);
-                alert("Upload Completed");
-              }}
-              onUploadError={(error: Error) => {
-                // Do something with the error.
-                alert(`ERROR! ${error.message}`);
-              }}
-            />
+            </div> : <div className="flex">
+              <UploadButton
+                endpoint="media"
+                onClientUploadComplete={(res) => {
+                  // Do something with the response
+                  console.log("Files: ", res);
+                  setAnswerSheets(res);
+                  alert("Upload Completed");
+                }}
+                onUploadError={(error: Error) => {
+                  // Do something with the error.
+                  alert(`ERROR! ${error.message}`);
+                }}
+              />
+            </div>
           }
         </div>
         {
