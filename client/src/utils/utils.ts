@@ -1,7 +1,7 @@
 // const aiPrompt = `You are a teacher and you have to grade the answer sheet of a student.
 // User will give you the question paper, answer key, and the answer sheet.
 // Answers written don't have to be accurate. Give full marks for partially correct answers or if answers have any.
-// Give 0 marks for wrong answers. Give 0 marks for unattempted questions. 
+// Give 0 marks for wrong answers. Give 0 marks for unattempted questions.
 // You have to grade the answer sheet and give the marks in JSON format.`;
 
 const aiPrompt = `
@@ -15,9 +15,9 @@ answer: the student's answer
 score: an array containing [ assigned_score, total_score ]
 remarks: any additional remarks or comments regarding the answer.`;
 
-const serverUrl = "http://localhost:8080";
+const serverUrl = "http://valuate-ai-server.vercel.app";
 
-const bgColors:any = {
+const bgColors: any = {
 	a: ["#f12711", "#f5af19"],
 	b: ["#7F7FD5", "#91EAE4"],
 	c: ["#654ea3", "#eaafc8"],
@@ -47,4 +47,3 @@ const bgColors:any = {
 };
 
 export { aiPrompt, serverUrl, bgColors };
-
