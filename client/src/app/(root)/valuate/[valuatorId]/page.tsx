@@ -108,8 +108,8 @@ export default function Page({ params: { valuatorId } }: Params) {
             answerSheets.length > 0 ? <div className="flex flex-col">
               <p className="font-semibold mb-5 text-xl">Answer Sheets Uploaded:</p>
               {
-                answerSheets.map((answerSheet: any) => {
-                  return <p className="flex items-center mb-2"><AiFillCheckCircle className="text-2xl mr-2 text-green-500" />{answerSheet?.url}</p>
+                answerSheets.map((answerSheet: any, index: number) => {
+                  return <p key={index} className="flex items-center mb-2"><AiFillCheckCircle className="text-2xl mr-2 text-green-500" />{answerSheet?.url}</p>
                 })
               }
             </div> : <div className="flex">

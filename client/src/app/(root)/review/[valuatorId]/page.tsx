@@ -133,7 +133,7 @@ const ViewAnswerPage = ({ params: { valuatorId } }: Params) => {
 				<p className="font-semibold text-xl mb-5 flex items-center"><AiOutlineTrophy className="mr-2"/> Total marks scored: {totalMarks?.totalScore} / {totalMarks?.maxScore}</p>
 					{
 						(valuations[selectedValuation] as any)?.data?.answers?.map((item: any, index: number) => {
-							return <div className="flex my-3 max-w-7xl">
+							return <div className="flex my-3 max-w-7xl" key={index}>
 								<div className="collapse shadow-xl border-2">
 									<input type="checkbox" />
 									<div className="flex items-center justify-between collapse-title">
@@ -171,7 +171,7 @@ const ViewAnswerPage = ({ params: { valuatorId } }: Params) => {
 			<dialog id="revaluation_modal" className="modal">
 				<div className="modal-box max-w-2xl align-middle">
 					<h3 className="flex items-center font-bold text-2xl mb-5">
-						<FiRefreshCcw className="mr-2" /> Revaluate {(valuations[selectedValuation] as any)?.data?.student_name}'s answer sheet
+						<FiRefreshCcw className="mr-2" /> Revaluate {(valuations[selectedValuation] as any)?.data?.student_name}&apos;s answer sheet
 					</h3>
 					<p className="mb-5 font-semibold">Remarks</p>
 					<textarea className="textarea textarea-bordered w-full" placeholder="Remarks" value={revaluationRemarks} onChange={(e) => setRevaluationRemarks(e.target.value)}></textarea>
