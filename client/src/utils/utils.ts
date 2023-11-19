@@ -15,7 +15,7 @@ answer: the student's answer
 score: an array containing [ assigned_score, total_score ]
 remarks: any additional remarks or comments regarding the answer.`;
 
-const serverUrl = "http://valuate-ai-server.vercel.app";
+const serverUrl = "https://valuate-ai-server.vercel.app";
 
 const bgColors: any = {
 	a: ["#f12711", "#f5af19"],
